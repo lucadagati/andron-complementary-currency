@@ -43,4 +43,4 @@ Dependencies (`node_modules`), Cordova platforms/plugins, build output, Fabric b
 
 ## Credits
 
-Developed at the University of Messina (MDSLab) by Luca D'Agati and Antonio Pipitone.
+Developed by Luca D'Agati and Antonio Pipitone.
