@@ -1,10 +1,15 @@
+import os
 from pymysql import constants
 import pymysql.cursors
 from pymysql.constants import CLIENT
 from function import createSalt, getFileEncode
 
 class DB:
-    def __init__(self, host="0.0.0.0", user="root", psw="provaPass", db="Andron", autocommit=True):
+    def __init__(self, host=None, user=None, psw=None, db=None, autocommit=True):
+        host = host or os.environ.get("ANDRON_DB_HOST", "127.0.0.1")
+        user = user or os.environ.get("ANDRON_DB_USER", "root")
+        psw = psw if psw is not None else os.environ.get("ANDRON_DB_PASSWORD", "")
+        db = db or os.environ.get("ANDRON_DB_NAME", "Andron")
         self._host = host
         self._user = user
         self._psw = psw

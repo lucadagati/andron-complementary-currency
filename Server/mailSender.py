@@ -1,12 +1,14 @@
 from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
 import smtplib, ssl
 
-sender="devmail417@gmail.com"
-password="aPWaCBqhuy2bZwT"
-host = 'smtp.gmail.com'
-port = 587
+# SMTP settings come from the environment (never commit credentials)
+sender = os.environ.get("ANDRON_SMTP_USER", "")
+password = os.environ.get("ANDRON_SMTP_PASSWORD", "")
+host = os.environ.get("ANDRON_SMTP_HOST", "smtp.gmail.com")
+port = int(os.environ.get("ANDRON_SMTP_PORT", "587"))
 
 def read_template(filename):
     with open(filename, 'r', encoding='utf-8') as template_file:
@@ -61,13 +63,3 @@ def garanteRegisterEmail(receiver,user,data):
     except Exception:
         return True #!! False
 
-"""
-if __name__=="__main__":
-    receiver = "anto_pip23@hotmail.it"
-    data = {
-        "nome" : "Antonio",
-        "password" : "password1"
-    }
-    t=Thread(target= registerEmail, kwargs=({'receiver':receiver, 'user':"utente", 'data': data}))
-    t.start()
-"""

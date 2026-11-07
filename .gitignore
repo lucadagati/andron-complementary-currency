@@ -1,0 +1,14 @@
+node_modules/
+platforms/
+plugins/
+www/
+.gradle/
+.vscode/
+__pycache__/
+*.pyc
+*.pem
+*.key
+wallet/
+.env
+.DS_Store
+Server/Server_File_Storage/
