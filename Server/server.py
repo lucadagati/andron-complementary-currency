@@ -82,6 +82,10 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
     jti = jwt_payload["jti"]
     return jti in blacklist
 
+def isGarante():
+    # Only tokens issued by /garante/login carry the "role" claim.
+    return get_jwt().get("role") == "garante"
+
 @app.before_first_request
 def createServerFolder():
     try:
@@ -883,7 +887,7 @@ def garanteLogin():
         if db.connetti():
             query = Query(db.getCursor())
             if query.logAdmin(data):
-                result={"access_token" : create_access_token(identity=data["login"], expires_delta=False)}
+                result={"access_token" : create_access_token(identity=data["login"], expires_delta=False, additional_claims={"role": "garante"})}
                 response.set_data(json.dumps(result))
                 return response, 200
             else:
@@ -906,7 +910,7 @@ def garanteSettings():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method=="PUT":
@@ -946,7 +950,7 @@ def accountManagementUser():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method == "DELETE":
@@ -984,7 +988,7 @@ def accountManagementEts():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         dati =request.get_json()
@@ -1021,7 +1025,7 @@ def accountManagementImpresa():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method=="PUT":
@@ -1080,7 +1084,7 @@ def approveServices():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method == "DELETE":
@@ -1111,7 +1115,7 @@ def approveNeeds():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
 
@@ -1142,7 +1146,7 @@ def approveProducts():
             return response, 500
         query=Query(db.getCursor())
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
         data = False
 
@@ -1179,7 +1183,7 @@ def managementServicesReport():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method=="PUT":
@@ -1214,7 +1218,7 @@ def managementOrdersReport():
         query=Query(db.getCursor())
         data = False
 
-        if not query.isAdmin("id"):
+        if not isGarante():
             return response, 401
 
         if request.method=="PUT":
@@ -1243,4 +1247,8 @@ def managementOrdersReport():
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=5000, debug=True)
+    app.run(
+        host=os.environ.get("ANDRON_HOST", "localhost"),
+        port=int(os.environ.get("ANDRON_PORT", "5001")),
+        debug=os.environ.get("ANDRON_DEBUG", "0") == "1",
+    )

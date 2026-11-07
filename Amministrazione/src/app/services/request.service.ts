@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http"
   providedIn: 'root'
 })
 export class RequestService {
-  private url = "  http://localhost:5001/garante/";
+  private url = "http://localhost:5001/garante/";
   public token : string;
 
   constructor(private http: HttpClient) { }

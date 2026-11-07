@@ -20,7 +20,7 @@ class DB:
         try:
             self._c1 = pymysql.connect(
                 host=self._host,
-                port=3306,
+                port=int(os.environ.get("ANDRON_DB_PORT", "3306")),
                 user=self._user,
                 password=self._psw,
                 db=self._db,

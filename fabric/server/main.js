@@ -32,7 +32,8 @@ app.use("/", getter);
 
 
 
-app.listen(8080, async () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, async () => {
     // Create a new file system based wallet for managing identities.
     const ccpPath = path.resolve(__dirname, '..',"test-network", "organizations", "peerOrganizations", "org1.example.com", 'connection-org1.json');
     global.ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
@@ -41,7 +42,7 @@ app.listen(8080, async () => {
     global.wallet = await Wallets.newFileSystemWallet(walletPath);
 
     // Check to see if we've already enrolled the user.
-    global.identity = await wallet.get('appUser');
+    global.identity = await global.wallet.get('appUser');
     if (!identity) {
     console.log('An identity for the user "appUser" does not exist in the wallet');
     console.log('Run the registerUser.ts application before retrying');
@@ -51,6 +52,6 @@ app.listen(8080, async () => {
     // Create a new gateway for connecting to our peer node.
     global.gateway = new Gateway();
 
-    console.log("API running on http://localhost:8080")
+    console.log(`API running on http://localhost:${PORT}`)
 })
 

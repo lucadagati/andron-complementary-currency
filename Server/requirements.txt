@@ -1,0 +1,7 @@
+flask>=2.0,<2.3
+werkzeug<3
+flask-jwt-extended>=4.0,<4.6
+flask-cors
+pymysql
+cryptography
+requests
